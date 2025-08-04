@@ -1,8 +1,5 @@
-from http.client import responses
-
-from llms.base import get_messages
-from llms.ollama import ask_ollama
-from llms.openai import ask_openai
+from llms.base import get_prompt_object
+from llms.ollama.ollama_client import ask_ollama
 from models.website import Website
 
 
@@ -10,7 +7,7 @@ class WebpageSummarizer:
     def __init__(self, url: str):
         self.website = Website(url)
 
-    def get_summarize_messages(self):
+    def get_summarize_prompt_object(self):
         title = self.website.get_title()
         contents = self.website.get_content()
         system_prompt = '''You are an AI assistant that summarizes webpages. 
@@ -21,21 +18,18 @@ class WebpageSummarizer:
         user_prompt = f'''Summarize the content of the webpage {url} with the title "{title}". 
                 The content of the website is as follows:\n{contents}'''
         print(f'User prompt: {user_prompt}')
-        messages = get_messages(system_prompt, user_prompt)
-        print(f'Messages: {messages}')
-        return messages
+        prompt_object = get_prompt_object(system_prompt, user_prompt)
+        print(f'Prompt object: {prompt_object}')
+        return prompt_object
 
-    def summarize_webpage_using_openai(self):
-        messages = self.get_summarize_messages()
-        response = ask_openai(model, messages)
-        print(response)
-
-    def summarize_webpage_using_ollama(self):
-        messages = self.get_summarize_messages()
-        response = ask_ollama(model, messages)
-        print(response)
+    def summarize_webpage(self):
+        messages = self.get_summarize_prompt_object()
+        # For openAI call this line.
+        # response = ask_openai(model, messages)
+        response = ask_ollama(messages)
+        response_content = response['message']['content']
+        print(response_content)
 
 if __name__ == '__main__':
     webpage_summarizer = WebpageSummarizer(url='https://wikipedia.org/')
-    # webpage_summarizer.summarize_webpage_using_openai(url)
-    webpage_summarizer.summarize_webpage_using_ollama()
+    webpage_summarizer.summarize_webpage()
