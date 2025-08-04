@@ -107,6 +107,7 @@ class WebpageBrochureCreator:
         Timer.stop("Create Brochure")
         elapsed = Timer.elapsed("Create Brochure")
         print(f'Brochure created in {elapsed} seconds.')
+
 if __name__ == '__main__':
     webpage_brochure_creator = WebpageBrochureCreator(url='https://anthropic.com')
     webpage_brochure_creator.create_brochure('Anthropic')
