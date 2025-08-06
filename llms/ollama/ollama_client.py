@@ -23,8 +23,8 @@ class OllamaClient(LLMClient):
         Sends a message list to the Ollama model and returns the full response.
         """
         model_to_use = model or get_environment_key_value('MODEL')
-        print(f"Model: {model_to_use}")
-        print("Waiting for Ollama's response... Please wait.")
+        # print(f"\nModel: {model_to_use}")
+        # print("Waiting for Ollama's response... Please wait.")
         #
         # if self.timer_enabled:
         #     Timer.start("ollama")
