@@ -12,9 +12,16 @@ def ask_ollama(text: str):
         {'role': 'system', 'content': 'You are a helpful assistant who responds in markdown'},
         {'role': 'user', 'content': text},
     ]
-    response = ollama_client.ask(messages=messages, stream=False)
-    return response['message']['content']
+    # Without streaming
+    # response = ollama_client.ask(messages=messages, stream=False)
+    # return response['message']['content']
 
+    # With streaming
+    response = ollama_client.ask(messages=messages, stream=True)
+    result = ""
+    for chunk in response:
+        result += chunk['message']['content']
+        yield result
 
 if __name__ == '__main__':
     # Basic interface
