@@ -18,7 +18,7 @@ class OllamaClient(LLMClient):
         self.timer_enabled = timer_enabled
         self._response = None
 
-    def ask(self, messages: List, model: Optional[str] = None, stream: bool = False):
+    def ask(self, messages: List, model: Optional[str] = None, stream: bool = False, tools=None):
         """
         Sends a message list to the Ollama model and returns the full response.
         """
@@ -28,7 +28,7 @@ class OllamaClient(LLMClient):
         #
         # if self.timer_enabled:
         #     Timer.start("ollama")
-        self._response = ollama.chat(model=model_to_use, messages=messages, stream=stream)
+        self._response = ollama.chat(model=model_to_use, messages=messages, stream=stream, tools=tools)
         # if self.timer_enabled:
         #     Timer.stop("ollama")
         #     elapsed = Timer.elapsed("ollama")
