@@ -48,14 +48,15 @@ def chat(message, history):
         messages.append({"role": "assistant", "content": assistant_message})
     messages.append({"role": "user", "content": message})
     response = ollama_client.ask(messages=messages, tools=tools)
-    tool_call = response["message"]["tool_calls"][0]
-    tool_name = tool_call["function"]["name"]
-    tool_args = tool_call["function"]["arguments"]
-    print(f"Tool requested: {tool_name} with args {tool_args}")
     message = response["message"]
-    response, city = handle_tool_call(tool_args)
-    messages.append(message)
-    messages.append(response)
+    if message.tool_calls:
+        tool_call = message.tool_calls[0]
+        tool_name = tool_call["function"]["name"]
+        tool_args = tool_call["function"]["arguments"]
+        print(f"Tool requested: {tool_name} with args {tool_args}")
+        response, city = handle_tool_call(tool_args)
+        messages.append(message)
+        messages.append(response)
     response = ollama_client.ask(messages=messages, stream=True)
     result = ""
     for chunk in response:
